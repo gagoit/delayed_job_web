@@ -117,20 +117,20 @@ class DelayedJobWeb < Sinatra::Base
 
   %w(pending failed).each do |page|
     post "/requeue/#{page}" do
-      delayed_jobs(page.to_sym, @queues).update_all(:run_at => Time.now, :failed_at => nil)
+      delayed_jobs(page.to_sym, @queues).update_all(:run_at => Time.now.utc, :failed_at => nil)
       redirect back
     end
   end
 
   post "/requeue/:id" do
     job = delayed_job.find(params[:id])
-    job.update_attributes(:run_at => Time.now, :failed_at => nil)
+    job.update_attributes(:run_at => Time.now.utc, :failed_at => nil)
     redirect back
   end
 
   post "/reload/:id" do
     job = delayed_job.find(params[:id])
-    job.update_attributes(:run_at => Time.now, :failed_at => nil, :locked_by => nil, :locked_at => nil, :last_error => nil, :attempts => 0)
+    job.update_attributes(:run_at => Time.now.utc, :failed_at => nil, :locked_by => nil, :locked_at => nil, :last_error => nil, :attempts => 0)
     redirect back
   end
 
