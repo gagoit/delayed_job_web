@@ -22,7 +22,9 @@
     <% end %>
     <dt>Handler</dt>
     <dd>
-    <pre><%=h YAML.load(job.handler).inspect rescue job.handler %></pre>
+    <pre>
+      <%=h begin YAML.load(job.handler).inspect rescue job.handler %>
+    </pre>
     </dd>
     <% if job.last_error %>
       <dt>Last Error</dt>
